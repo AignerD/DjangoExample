@@ -40,10 +40,12 @@ djangotutorial/media/*
 !djangotutorial/media/recordings/.gitkeep
 *.wav  # Example: audio recordings saved in the media folder
 
-# Ignore logs - These store debug or error messages; they should not be part of version control
-djangotutorial/logs/
-djangotutorial/logs/recording_log.txt
+# # Ignore logs - These store debug or error messages; they should not be part of version control
+# djangotutorial/logs/
+# djangotutorial/logs/recording_log.txt
 
+djangotutorial/logs/*
+!djangotutorial/logs/.gitkeep
 # Ignore environment variables - This prevents sensitive credentials (like secret keys) from being exposed
 *.env
 .env
