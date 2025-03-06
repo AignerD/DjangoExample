@@ -1,0 +1,23 @@
+1. Create the project folder: mkdir ProjectFolderName
+   Create the project folder: mkdir ________
+
+2. Create the virtual environment
+3. Activate the virtual environment
+4. Install the required packages
+
+5. run: django-admin startproject SiteName ProjectFolderName
+   run: django-admin startproject ________ ________
+ 
+ \7. python manage.py runserver 0.0.0.0:80
+
+8. ngrok config add-authtoken 1hhNRTstfONldVdWFL9OAa6yF7U_4KEzfJ8s9D2irKfiWE6vF
+
+9. ngrok http --url=amused-bonefish-bursting.ngrok-free.app 80
+
+
+
+
+
+
+
+6. run: python manage.py startapp AppName

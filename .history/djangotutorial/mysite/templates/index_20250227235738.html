@@ -1,0 +1,286 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Text to Speech Recorder</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <style>
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* body {
+            display: flex;
+            height: 100vh;
+            background-color: #f4f4f4;
+        } */
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Sidebar */
+        /* .sidebar {
+            width: 250px;
+            background: #222;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        } */
+
+        /* Sidebar */
+        .sidebar {
+            width: 200px;
+            background: #1e1e1e;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+        }
+
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            padding: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .sidebar ul li:hover {
+            background: #444;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        /* Recording Buttons */
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #start-recording {
+            background: #28a745;
+            color: white;
+        }
+
+        #stop-recording {
+            background: #dc3545;
+            color: white;
+        }
+
+        button:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+
+        /* Recording Indicator */
+        .recording-indicator {
+            width: 12px;
+            height: 12px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            animation: pulse 1s infinite;
+            display: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            font-size: 14px;
+            color: gray;
+            margin-top: 10px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: #ddd;
+            position: relative;
+            margin-top: 10px;
+            visibility: hidden;
+        }
+
+        .progress-bar span {
+            display: block;
+            height: 100%;
+            width: 0%;
+            background: #28a745;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Dashboard</h2>
+        <ul>
+            <li><a href="#">🎤 Recorder</a></li>
+            <li><a href="#">📂 Saved Files</a></li>
+            <li><a href="#">⚙️ Settings</a></li>
+            <li><a href="#">📊 Analytics</a></li>
+        </ul>
+        <p style="text-align: center; font-size: 12px;">&copy; 2025 VoiceRecorder</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="card">
+            <div class="recording-indicator" id="recording-indicator"></div>
+            <h2>Read the text below:</h2>
+
+            <p id="text-to-read"></p>
+            <div class="progress-bar"><span></span></div>
+            <button id="start-recording">🎤 Start Recording</button>
+            <button id="stop-recording" disabled>⏹️ Stop Recording</button>
+        </div>
+    </div>
+
+    <script>
+        let recorder;
+        let audioChunks = [];
+    
+        // Hardcoded list of phrases
+        let phrases = [
+            "Hello, how are you?",
+            "I love learning new things.",
+            "Can you help me with this?",
+            "It's a beautiful day outside.",
+            "Thank you for your help!",
+            "Let's get started with this project.",
+            "Technology is advancing so quickly!",
+            "What is your favorite hobby?",
+            "I enjoy coding and designing websites.",
+            "How do you like your coffee?",
+            "Let's meet at the park this afternoon."
+        ];
+    
+        let index = 0;
+    
+        // Set initial phrase
+        document.getElementById('text-to-read').innerText = phrases[index];
+    
+        document.getElementById('start-recording').addEventListener('click', async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    
+            recorder = new MediaRecorder(stream);
+            audioChunks = [];
+    
+            recorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+    
+            recorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const formData = new FormData();
+                formData.append('audio', audioBlob, `recording.wav`);
+                formData.append('question_number', `Q${index + 1}`); // Add question number
+    
+                // Send recording to the server
+                await fetch('/save_audio/', {
+                    method: 'POST',
+                    body: formData
+                });
+    
+                // Move to the next phrase
+                index++;
+                if (index < phrases.length) {
+                    document.getElementById('text-to-read').innerText = phrases[index];
+                } else {
+                    document.getElementById('start-recording').disabled = true;
+                    document.getElementById('text-to-read').innerText = "All recordings completed!";
+                }
+    
+                // Reset UI after recording
+                document.getElementById('start-recording').innerHTML = "🎤 Start Recording";
+                document.getElementById('start-recording').disabled = false;
+                document.getElementById('start-recording').style.background = "#28a745";
+                document.getElementById('recording-indicator').style.display = "none";
+            };
+    
+            // Update button UI for recording state
+            document.getElementById('start-recording').innerText = "Recording...";
+            document.getElementById('start-recording').disabled = true;
+            document.getElementById('start-recording').style.background = "red";
+            document.getElementById('recording-indicator').style.display = "block";
+    
+            recorder.start();
+            document.getElementById('stop-recording').disabled = false;
+        });
+    
+        document.getElementById('stop-recording').addEventListener('click', () => {
+            recorder.stop();
+            document.getElementById('stop-recording').disabled = true;
+        });
+    </script>
+
+</body>
+
+</html>

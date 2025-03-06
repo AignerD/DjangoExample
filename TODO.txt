@@ -1,0 +1,15 @@
+Research:
+What is the difference between asgi and wsgi?
+what is asgi? https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
+what is wsgi? https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
+
+
+
+
+
+
+ngrok config add-authtoken 1hhNRTstfONldVdWFL9OAa6yF7U_4KEzfJ8s9D2irKfiWE6vF
+ngrok http --url=amused-bonefish-bursting.ngrok-free.app 80
+
+python manage.py runserver 0.0.0.0:80
+

@@ -1,0 +1,2 @@
+- How can I edit the congratulations page in django to show something else when the app is first navigated to.
+
