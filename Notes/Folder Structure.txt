@@ -1,0 +1,24 @@
+DjangoExample/                # Root project directory
+│── djangotutorial/           # Django project folder
+│   ├── logs/                 # (Ignored) Logs directory
+│   ├── media/                # (Ignored) Uploaded media files
+│   ├── mysite/               # Django app folder
+│   │   ├── static/           # Static files
+│   │   │   ├── css/          
+│   │   │   │   ├── style.css
+│   │   ├── templates/        # HTML templates
+│   │   │   ├── index.html
+│   │   ├── settings.py       # Django settings
+│   │   ├── views.py          # Django views
+│   │   ├── urls.py           # Django URL routing
+│   │   ├── wsgi.py           # WSGI entry point
+│   ├── db.sqlite3            # (Ignored) Database file
+│   ├── manage.py             # Django management script
+│── env/                      # (Ignored) Virtual environment
+│── .gitignore                # Git ignore file
+│── README.md                 # Project documentation (optional)
+│── requirements.txt           # Python dependencies (optional)
+│── TODO.txt                   # Notes or tasks (optional)
+│── For ChatGPT.txt            # (Optional)
+│── .history/                  # (Ignored) VS Code history files
+│── .git/                      # Hidden Git folder (DO NOT TOUCH)
