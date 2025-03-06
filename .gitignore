@@ -38,7 +38,7 @@ db.sqlite3
 
 djangotutorial/media/*
 !djangotutorial/media/recordings/.gitkeep
-*.wav  # Example: audio recordings saved in the media folder
+# *.wav  # Example: audio recordings saved in the media folder
 
 # # Ignore logs - These store debug or error messages; they should not be part of version control
 # djangotutorial/logs/
