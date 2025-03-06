@@ -32,9 +32,12 @@ Thumbs.db  # Windows file
 db.sqlite3
 *.sqlite3
 
-# Ignore media/uploads (recordings) - These files are user-generated and should not be stored in the repo
-djangotutorial/media/
-djangotutorial/media/recordings/
+# # Ignore media/uploads (recordings) - These files are user-generated and should not be stored in the repo
+# djangotutorial/media/
+# djangotutorial/media/recordings/
+
+djangotutorial/media/*
+!djangotutorial/media/recordings/.gitkeep
 *.wav  # Example: audio recordings saved in the media folder
 
 # Ignore logs - These store debug or error messages; they should not be part of version control
